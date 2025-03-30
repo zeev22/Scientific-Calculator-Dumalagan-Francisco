@@ -13,7 +13,18 @@ export default function Calculator() {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
-  const factorial = (n) => (n < 0 ? NaN : n === 0 ? 1 : n * factorial(n - 1));
+  // Iterative factorial to avoid stack overflow for large numbers
+  const factorial = (n) => {
+    if (n < 0 || !Number.isInteger(n)) return NaN;
+    if (n === 0) return 1;
+    let result = 1;
+    for (let i = 1; i <= n; i++) {
+      result *= i;
+      // Prevent overflow by capping at a reasonable limit
+      if (result > Number.MAX_SAFE_INTEGER) return Infinity;
+    }
+    return result;
+  };
 
   const handleDisplayModeChange = (newMode) => setDisplayMode(newMode);
   const handleAngleModeChange = (newMode) => setAngleMode(newMode);
@@ -23,7 +34,24 @@ export default function Calculator() {
   const handleClick = (value) => {
     if (value === "=") {
       try {
-        let expression = input
+        // Step 1: Parse the expression for special handling of '%'
+        let expression = input;
+
+        // Handle '%' as modulo when between two numbers (e.g., "10 % 3")
+        // Use a regex to find patterns like "number % number"
+        expression = expression.replace(
+          /(\d+\.?\d*)\s*%\s*(\d+\.?\d*)/g,
+          "($1 % $2)"
+        );
+
+        // Handle '%' as percentage when it's a suffix (e.g., "5%")
+        expression = expression.replace(
+          /(\d+\.?\d*)%/g,
+          "($1 / 100)"
+        );
+
+        // Step 2: Replace mathematical functions and constants
+        expression = expression
           .replace(/sin\(/g, `Math.sin(${angleMode === "deg" ? "Math.PI/180*" : ""}`)
           .replace(/cos\(/g, `Math.cos(${angleMode === "deg" ? "Math.PI/180*" : ""}`)
           .replace(/tan\(/g, `Math.tan(${angleMode === "deg" ? "Math.PI/180*" : ""}`)
@@ -40,17 +68,23 @@ export default function Calculator() {
           .replace(/\^/g, "**")
           .replace(/π/g, "Math.PI")
           .replace(/e/g, "Math.E")
-          .replace(/mod/g, "%")
           .replace(/M/g, memory)
-          .replace(/(\d+)!/g, (_, num) => factorial(parseInt(num)))
-          .replace(/(\d+)%/g, (_, num) => `(${num}/100)`);
+          .replace(/(\d+)!/g, (_, num) => factorial(parseInt(num)));
 
+        // Step 3: Evaluate the expression
         const evalResult = Function(`'use strict'; return (${expression})`)();
+
+        // Step 4: Format the result based on display mode
         let formattedResult = evalResult;
         if (displayMode === "binary") {
           formattedResult = Math.floor(evalResult).toString(2);
         } else if (displayMode === "hex") {
           formattedResult = Math.floor(evalResult).toString(16).toUpperCase();
+        } else {
+          // For decimal, round to avoid floating-point precision issues
+          formattedResult = Number.isFinite(evalResult)
+            ? Number(evalResult.toFixed(10))
+            : evalResult;
         }
 
         setResult(formattedResult.toString());
