@@ -398,7 +398,7 @@ button:active {
   scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
 }
 
-
+/* Mobile (≤480px) */
 @media (max-width: 480px) {
   .calculator {
     width: 100%;
@@ -416,11 +416,7 @@ button:active {
   }
 
   .scientific-buttons {
-    display: none;
-  }
-
-  .calculator.second-mode-active .scientific-buttons {
-    display: grid;
+    display: grid; /* Always visible on mobile */
   }
 
   button {
@@ -512,7 +508,7 @@ button:active {
   }
 }
 
-
+/* Desktop (≥769px) */
 @media (min-width: 769px) {
   .calculator {
     max-width: 600px;
