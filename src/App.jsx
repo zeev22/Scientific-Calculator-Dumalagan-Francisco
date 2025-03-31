@@ -4,7 +4,7 @@ import { useState } from "react";
 import "./App.css";
 
 export default function Calculator() {
-  // State declarations
+
   const [displayMode, setDisplayMode] = useState("decimal");
   const [angleMode, setAngleMode] = useState("deg");
   const [input, setInput] = useState("");
@@ -14,7 +14,6 @@ export default function Calculator() {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
-  // Button definitions
   const basicButtons = [
     "7", "8", "9", "/",
     "4", "5", "6", "*",
@@ -50,7 +49,6 @@ export default function Calculator() {
   const clearButtons = ["AC", "⌫"];
   const memoryButtons = ["M+", "M-", "MC", "MR"];
 
-  // Helper functions
   const factorial = (n) => {
     if (n < 0 || !Number.isInteger(n)) return NaN;
     if (n === 0) return 1;
@@ -62,7 +60,6 @@ export default function Calculator() {
     return result;
   };
 
-  // Event handlers
   const handleDisplayModeChange = (newMode) => setDisplayMode(newMode);
   const handleAngleModeChange = (newMode) => setAngleMode(newMode);
   const toggleSecondMode = () => setSecondMode(!secondMode);
@@ -78,7 +75,6 @@ export default function Calculator() {
 
         let expression = input;
 
-        // Handle percentage operations
         expression = expression.replace(
           /(\d+\.?\d*)\s*([+-])\s*(\d+\.?\d*)%/g,
           (match, num1, operator, num2) => {
@@ -87,19 +83,19 @@ export default function Calculator() {
           }
         );
 
-        // Handle standalone percentage
+       
         expression = expression.replace(
           /(\d+\.?\d*)%/g,
           "($1 / 100)"
         );
 
-        // Handle modulo
+      
         expression = expression.replace(
           /(\d+\.?\d*)\s*%\s*(\d+\.?\d*)/g,
           "($1 % $2)"
         );
 
-        // Replace mathematical functions and constants
+       
         expression = expression
           .replace(/log\(/g, "Math.log10(")
           .replace(/ln\(/g, "Math.log(")
@@ -115,7 +111,7 @@ export default function Calculator() {
           .replace(/M/g, memory)
           .replace(/(\d+)!/g, (_, num) => factorial(parseInt(num)));
 
-        // Handle trigonometric functions with angle mode conversion
+        
         const trigFunctions = ["sin", "cos", "tan", "asin", "acos", "atan"];
         trigFunctions.forEach((func) => {
           const regex = new RegExp(`${func}\\(([^()]+)\\)`, "g");
@@ -132,17 +128,14 @@ export default function Calculator() {
           });
         });
 
-        // Validate parentheses
         const openParens = (expression.match(/\(/g) || []).length;
         const closeParens = (expression.match(/\)/g) || []).length;
         if (openParens !== closeParens) {
           throw new Error("Mismatched parentheses");
         }
 
-        // Evaluate the expression
         const evalResult = Function(`'use strict'; return (${expression})`)();
 
-        // Format the result
         let formattedResult;
         if (!Number.isFinite(evalResult)) {
           formattedResult = evalResult.toString();

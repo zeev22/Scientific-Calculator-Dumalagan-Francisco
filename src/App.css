@@ -10,7 +10,7 @@
 }
 
 ::-webkit-scrollbar {
-  width: 8px; /* Reduced for mobile */
+  width: 8px; 
 }
 
 ::-webkit-scrollbar-track {
@@ -42,7 +42,7 @@ body {
   background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0.9) 80%);
   overflow: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: clamp(10px, 2vw, 20px); /* Responsive padding */
+  padding: clamp(10px, 2vw, 20px); 
   box-sizing: border-box;
 }
 
@@ -79,11 +79,11 @@ body {
 
 .calculator {
   width: 100%;
-  max-width: clamp(320px, 50vw, 400px); /* Adjusted for mobile */
-  min-height: clamp(400px, 80vh, 500px); /* Responsive height */
+  max-width: clamp(320px, 50vw, 400px); 
+  min-height: clamp(400px, 80vh, 500px); 
   display: flex;
   flex-direction: column;
-  padding: clamp(15px, 3vw, 20px); /* Responsive padding */
+  padding: clamp(15px, 3vw, 20px);
   margin: auto;
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.12);
@@ -197,7 +197,7 @@ body {
 
 .buttons-grid {
   display: grid;
-  grid-template-columns: 3fr 1fr; /* Same structure on all screens */
+  grid-template-columns: 3fr 1fr;
   gap: clamp(6px, 1.5vw, 8px);
   padding: clamp(6px, 1.5vw, 8px);
 }
@@ -381,7 +381,6 @@ button:active {
   overflow-y: auto;
 }
 
-/* Media Queries for Responsive Adjustments */
 @media (max-width: 480px) {
   body {
     padding: 10px;
@@ -392,22 +391,22 @@ button:active {
   }
 
   .calculator {
-    max-width: 320px; /* Fit small phone screens */
+    max-width: 320px;
     min-height: 400px;
     padding: 15px;
     border-radius: 15px;
   }
 
   .calculator-header {
-    justify-content: space-between; /* Keep history-toggle visible */
+    justify-content: space-between; 
   }
 
   .history-toggle {
-    display: block; /* Ensure visibility on mobile */
+    display: block; 
   }
 
   .buttons-grid {
-    grid-template-columns: 3fr 1fr; /* Same structure as web */
+    grid-template-columns: 3fr 1fr; 
   }
 
   button {
