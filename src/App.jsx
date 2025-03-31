@@ -4,6 +4,7 @@ import { useState } from "react";
 import "./App.css";
 
 export default function Calculator() {
+  // State declarations
   const [displayMode, setDisplayMode] = useState("decimal");
   const [angleMode, setAngleMode] = useState("deg");
   const [input, setInput] = useState("");
@@ -13,19 +14,55 @@ export default function Calculator() {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
-  // Iterative factorial to avoid stack overflow for large numbers
+  // Button definitions
+  const basicButtons = [
+    "7", "8", "9", "/",
+    "4", "5", "6", "*",
+    "1", "2", "3", "-",
+    "0", ".", "=", "+",
+    "(", ")", "π", "e",
+    "^", "%", "!", "Ans"
+  ];
+
+  const scientificFunctions = {
+    primary: [
+      { label: "sin(", value: "sin(", fn: (x) => angleMode === "deg" ? Math.sin(x * Math.PI / 180) : Math.sin(x) },
+      { label: "cos(", value: "cos(", fn: (x) => angleMode === "deg" ? Math.cos(x * Math.PI / 180) : Math.cos(x) },
+      { label: "tan(", value: "tan(", fn: (x) => angleMode === "deg" ? Math.tan(x * Math.PI / 180) : Math.tan(x) },
+      { label: "log(", value: "log(", fn: (x) => Math.log10(x) },
+      { label: "ln(", value: "ln(", fn: (x) => Math.log(x) },
+      { label: "√(", value: "√(", fn: (x) => Math.sqrt(x) },
+      { label: "x²", value: "^2", fn: (x) => x ** 2 },
+      { label: "xʸ", value: "^", fn: (x, y) => x ** y }
+    ],
+    secondary: [
+      { label: "asin(", value: "asin(", fn: (x) => angleMode === "deg" ? Math.asin(x) * 180 / Math.PI : Math.asin(x) },
+      { label: "acos(", value: "acos(", fn: (x) => angleMode === "deg" ? Math.acos(x) * 180 / Math.PI : Math.acos(x) },
+      { label: "atan(", value: "atan(", fn: (x) => angleMode === "deg" ? Math.atan(x) * 180 / Math.PI : Math.atan(x) },
+      { label: "floor(", value: "floor(", fn: (x) => Math.floor(x) },
+      { label: "ceil(", value: "ceil(", fn: (x) => Math.ceil(x) },
+      { label: "abs(", value: "abs(", fn: (x) => Math.abs(x) },
+      { label: "∛(", value: "∛(", fn: (x) => Math.cbrt(x) },
+      { label: "exp(", value: "exp(", fn: (x) => Math.exp(x) }
+    ]
+  };
+
+  const clearButtons = ["AC", "⌫"];
+  const memoryButtons = ["M+", "M-", "MC", "MR"];
+
+  // Helper functions
   const factorial = (n) => {
     if (n < 0 || !Number.isInteger(n)) return NaN;
     if (n === 0) return 1;
     let result = 1;
     for (let i = 1; i <= n; i++) {
       result *= i;
-      // Prevent overflow by capping at a reasonable limit
       if (result > Number.MAX_SAFE_INTEGER) return Infinity;
     }
     return result;
   };
 
+  // Event handlers
   const handleDisplayModeChange = (newMode) => setDisplayMode(newMode);
   const handleAngleModeChange = (newMode) => setAngleMode(newMode);
   const toggleSecondMode = () => setSecondMode(!secondMode);
@@ -34,30 +71,36 @@ export default function Calculator() {
   const handleClick = (value) => {
     if (value === "=") {
       try {
-        // Step 1: Parse the expression for special handling of '%'
+        if (!input.trim()) {
+          setResult("Error: Empty expression");
+          return;
+        }
+
         let expression = input;
 
-        // Handle '%' as modulo when between two numbers (e.g., "10 % 3")
-        // Use a regex to find patterns like "number % number"
+        // Handle percentage operations
         expression = expression.replace(
-          /(\d+\.?\d*)\s*%\s*(\d+\.?\d*)/g,
-          "($1 % $2)"
+          /(\d+\.?\d*)\s*([+-])\s*(\d+\.?\d*)%/g,
+          (match, num1, operator, num2) => {
+            const percentageValue = (parseFloat(num2) / 100) * parseFloat(num1);
+            return operator === "+" ? `(${num1} + ${percentageValue})` : `(${num1} - ${percentageValue})`;
+          }
         );
 
-        // Handle '%' as percentage when it's a suffix (e.g., "5%")
+        // Handle standalone percentage
         expression = expression.replace(
           /(\d+\.?\d*)%/g,
           "($1 / 100)"
         );
 
-        // Step 2: Replace mathematical functions and constants
+        // Handle modulo
+        expression = expression.replace(
+          /(\d+\.?\d*)\s*%\s*(\d+\.?\d*)/g,
+          "($1 % $2)"
+        );
+
+        // Replace mathematical functions and constants
         expression = expression
-          .replace(/sin\(/g, `Math.sin(${angleMode === "deg" ? "Math.PI/180*" : ""}`)
-          .replace(/cos\(/g, `Math.cos(${angleMode === "deg" ? "Math.PI/180*" : ""}`)
-          .replace(/tan\(/g, `Math.tan(${angleMode === "deg" ? "Math.PI/180*" : ""}`)
-          .replace(/asin\(/g, `${angleMode === "deg" ? "180/Math.PI*" : ""}Math.asin(`)
-          .replace(/acos\(/g, `${angleMode === "deg" ? "180/Math.PI*" : ""}Math.acos(`)
-          .replace(/atan\(/g, `${angleMode === "deg" ? "180/Math.PI*" : ""}Math.atan(`)
           .replace(/log\(/g, "Math.log10(")
           .replace(/ln\(/g, "Math.log(")
           .replace(/√\(/g, "Math.sqrt(")
@@ -65,32 +108,56 @@ export default function Calculator() {
           .replace(/floor\(/g, "Math.floor(")
           .replace(/ceil\(/g, "Math.ceil(")
           .replace(/abs\(/g, "Math.abs(")
+          .replace(/exp\(/g, "Math.exp(")
           .replace(/\^/g, "**")
           .replace(/π/g, "Math.PI")
           .replace(/e/g, "Math.E")
           .replace(/M/g, memory)
           .replace(/(\d+)!/g, (_, num) => factorial(parseInt(num)));
 
-        // Step 3: Evaluate the expression
+        // Handle trigonometric functions with angle mode conversion
+        const trigFunctions = ["sin", "cos", "tan", "asin", "acos", "atan"];
+        trigFunctions.forEach((func) => {
+          const regex = new RegExp(`${func}\\(([^()]+)\\)`, "g");
+          expression = expression.replace(regex, (match, arg) => {
+            if (func.startsWith("a")) {
+              return angleMode === "deg" 
+                ? `(Math.${func}(${arg}) * 180 / Math.PI)` 
+                : `Math.${func}(${arg})`;
+            } else {
+              return angleMode === "deg" 
+                ? `Math.${func}((${arg}) * Math.PI / 180)` 
+                : `Math.${func}(${arg})`;
+            }
+          });
+        });
+
+        // Validate parentheses
+        const openParens = (expression.match(/\(/g) || []).length;
+        const closeParens = (expression.match(/\)/g) || []).length;
+        if (openParens !== closeParens) {
+          throw new Error("Mismatched parentheses");
+        }
+
+        // Evaluate the expression
         const evalResult = Function(`'use strict'; return (${expression})`)();
 
-        // Step 4: Format the result based on display mode
-        let formattedResult = evalResult;
-        if (displayMode === "binary") {
+        // Format the result
+        let formattedResult;
+        if (!Number.isFinite(evalResult)) {
+          formattedResult = evalResult.toString();
+        } else if (displayMode === "binary") {
           formattedResult = Math.floor(evalResult).toString(2);
         } else if (displayMode === "hex") {
           formattedResult = Math.floor(evalResult).toString(16).toUpperCase();
         } else {
-          // For decimal, round to avoid floating-point precision issues
-          formattedResult = Number.isFinite(evalResult)
-            ? Number(evalResult.toFixed(10))
-            : evalResult;
+          formattedResult = Number(evalResult.toFixed(10));
         }
 
         setResult(formattedResult.toString());
         setHistory([{ expression: input, result: formattedResult }, ...history.slice(0, 9)]);
       } catch (error) {
-        setResult("Error");
+        setResult(`Error: ${error.message || "Invalid expression"}`);
       }
     } else if (value === "AC") {
       setInput("");
@@ -109,36 +176,10 @@ export default function Calculator() {
       setInput(input + "M");
     } else if (value === "MC") {
       setMemory(0);
-    } else if (value === "x²") {
-      setInput(input + "^2");
-    } else if (value === "xʸ") {
-      setInput(input + "^");
     } else {
       setInput(input + value);
     }
   };
-
-  const basicButtons = [
-    "7", "8", "9", "/",
-    "4", "5", "6", "*",
-    "1", "2", "3", "-",
-    "0", ".", "=", "+",
-    "(", ")", "π", "e",
-    "^", "%", "!", "Ans"
-  ];
-
-  const primaryScientificButtons = [
-    "sin(", "cos(", "tan(", "log(",
-    "ln(", "√(", "x²", "xʸ"
-  ];
-
-  const secondaryScientificButtons = [
-    "asin(", "acos(", "atan(", "floor(",
-    "ceil(", "abs(", "∛(", "exp("
-  ];
-
-  const clearButtons = ["AC", "⌫"];
-  const memoryButtons = ["M+", "M-", "MC", "MR"];
 
   return (
     <div className="app">
@@ -211,13 +252,13 @@ export default function Calculator() {
             </div>
 
             <div className="scientific-buttons">
-              {(secondMode ? secondaryScientificButtons : primaryScientificButtons).map((btn) => (
+              {(secondMode ? scientificFunctions.secondary : scientificFunctions.primary).map((func) => (
                 <button
-                  key={btn}
+                  key={func.value}
                   className="function-btn"
-                  onClick={() => handleClick(btn)}
+                  onClick={() => handleClick(func.value)}
                 >
-                  {btn}
+                  {func.label}
                 </button>
               ))}
             </div>

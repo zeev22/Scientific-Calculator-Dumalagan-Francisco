@@ -42,6 +42,8 @@ body {
   background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0.9) 80%);
   overflow: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .aurora {
@@ -76,13 +78,13 @@ body {
 }
 
 .calculator {
-  width: 75%;
+  width: 100%;
   max-width: 400px;
   min-height: 500px;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  margin: 10px 0;
+  margin: auto;
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(18px);
@@ -113,11 +115,6 @@ body {
   margin-bottom: 10px;
 }
 
-.calculator-title:hover {
-  text-shadow: 0px 4px 20px rgba(255, 255, 255, 0.5);
-  transform: scale(1.02);
-}
-
 .history-toggle {
   background: linear-gradient(135deg, #2196F3, #4CAF50);
   color: white;
@@ -129,11 +126,6 @@ body {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.history-toggle:hover {
-  background: linear-gradient(135deg, #4CAF50, #2196F3);
-  transform: scale(1.05);
 }
 
 .display-settings {
@@ -340,13 +332,6 @@ button:active {
   background: rgba(144, 233, 255, 0.5);
 }
 
-.memory-display {
-  font-size: clamp(0.6rem, 1.5vw, 0.7rem);
-  background: rgba(0, 0, 0, 0.25);
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-
 .history-panel {
   margin-top: 15px;
   background: var(--button-bg);
@@ -394,34 +379,44 @@ button:active {
 .calculator.history-open .history-panel {
   max-height: 180px;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
 }
 
-/* Mobile (≤480px) */
 @media (max-width: 480px) {
+  body {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
   .calculator {
     width: 100%;
-    min-height: 80vh; /* Increased height to better fit the screen */
-    max-height: 100vh;
+    min-height: auto;
+    max-height: 90vh;
     height: auto;
     overflow-y: auto;
-    border-radius: 15px; /* Adjusted border radius for mobile */
-    padding: 10px;
-    max-width: none;
+    border-radius: 15px;
+    padding: 15px;
+    max-width: 100%;
+    margin: auto;
+  }
+
+  .calculator-header {
+    justify-content: center;
+  }
+
+  .history-toggle {
+    display: none;
   }
 
   .buttons-grid {
     grid-template-columns: 2fr 1fr;
   }
 
-  .scientific-buttons {
-    display: grid;
-  }
-
   button {
-    padding: 10px 0; /* Increased for better touch target */
-    font-size: 0.9rem; /* Slightly larger for readability */
+    padding: 12px 0;
+    font-size: 0.9rem;
   }
 
   .clear-btn, .delete-btn {
@@ -430,12 +425,12 @@ button:active {
   }
 
   .memory-btn {
-    padding: 8px 0; /* Increased for balance */
+    padding: 8px 0;
     font-size: 0.8rem;
   }
 
   .second-btn {
-    padding: 8px 0; /* Reduced to match memory buttons */
+    padding: 8px 0;
     font-size: 0.8rem;
   }
 
@@ -464,20 +459,10 @@ button:active {
   }
 }
 
-/* Tablet (481px–768px) */
 @media (min-width: 481px) and (max-width: 768px) {
   .calculator {
     max-width: 500px;
     padding: 15px;
-  
-  }
-
-  .buttons-grid {
-    grid-template-columns: 3fr 1fr;
-  }
-
-  .scientific-buttons {
-    display: grid;
   }
 
   button {
@@ -503,25 +488,12 @@ button:active {
   .side-buttons {
     gap: 6px;
   }
-
-  .clear-buttons, .memory-buttons {
-    gap: 6px;
-  }
 }
 
-/* Desktop (≥769px) */
 @media (min-width: 769px) {
   .calculator {
     max-width: 600px;
     padding: 25px;
-  }
-
-  .buttons-grid {
-    grid-template-columns: 3fr 1fr;
-  }
-
-  .scientific-buttons {
-    display: grid;
   }
 
   button {
@@ -542,14 +514,6 @@ button:active {
   .second-btn {
     padding: 16px 0;
     font-size: 1rem;
-  }
-
-  .side-buttons {
-    gap: 8px;
-  }
-
-  .clear-buttons, .memory-buttons {
-    gap: 6px;
   }
 
   .display {
