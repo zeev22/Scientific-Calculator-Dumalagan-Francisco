@@ -10,7 +10,7 @@
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px; /* Reduced for mobile */
 }
 
 ::-webkit-scrollbar-track {
@@ -42,7 +42,7 @@ body {
   background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0.9) 80%);
   overflow: auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 20px;
+  padding: clamp(10px, 2vw, 20px); /* Responsive padding */
   box-sizing: border-box;
 }
 
@@ -79,11 +79,11 @@ body {
 
 .calculator {
   width: 100%;
-  max-width: 400px;
-  min-height: 500px;
+  max-width: clamp(320px, 50vw, 400px); /* Adjusted for mobile */
+  min-height: clamp(400px, 80vh, 500px); /* Responsive height */
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: clamp(15px, 3vw, 20px); /* Responsive padding */
   margin: auto;
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.12);
@@ -118,11 +118,11 @@ body {
 .history-toggle {
   background: linear-gradient(135deg, #2196F3, #4CAF50);
   color: white;
-  font-size: clamp(11px, 2.5vw, 13px);
+  font-size: clamp(10px, 2vw, 13px);
   font-weight: bold;
   border: none;
   border-radius: 8px;
-  padding: 8px 10px;
+  padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 10px);
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
@@ -149,13 +149,13 @@ body {
 }
 
 .display-mode button, .angle-mode button {
-  padding: 5px 10px;
+  padding: clamp(4px, 1vw, 5px) clamp(8px, 2vw, 10px);
   border: none;
   background: var(--button-bg);
   color: var(--text-color);
   cursor: pointer;
   transition: all 0.2s;
-  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
 }
 
 .display-mode button.active, .angle-mode button.active {
@@ -163,7 +163,7 @@ body {
 }
 
 .memory-display {
-  padding: 5px 10px;
+  padding: clamp(4px, 1vw, 5px) clamp(8px, 2vw, 10px);
   background: var(--button-bg);
   border-radius: 8px;
   font-size: clamp(0.6rem, 1.5vw, 0.7rem);
@@ -172,16 +172,16 @@ body {
 .display {
   background: rgba(255, 255, 255, 0.12);
   border-radius: 10px;
-  padding: 10px;
+  padding: clamp(8px, 2vw, 10px);
   font-family: 'Digital-7', monospace;
   margin-bottom: 10px;
   text-align: right;
-  min-height: 60px;
+  min-height: clamp(50px, 10vh, 60px);
   border: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 .input {
-  font-size: clamp(0.9rem, 3vw, 1.1rem);
+  font-size: clamp(0.8rem, 2.5vw, 1.1rem);
   color: rgba(255, 255, 255, 0.7);
   min-height: 1.5rem;
   margin-bottom: 5px;
@@ -189,7 +189,7 @@ body {
 }
 
 .result {
-  font-size: clamp(1.8rem, 5vw, 2.2rem);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
   font-weight: bold;
   color: var(--text-color);
   word-wrap: break-word;
@@ -197,52 +197,52 @@ body {
 
 .buttons-grid {
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 8px;
-  padding: 8px;
+  grid-template-columns: 3fr 1fr; /* Same structure on all screens */
+  gap: clamp(6px, 1.5vw, 8px);
+  padding: clamp(6px, 1.5vw, 8px);
 }
 
 .main-buttons {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: clamp(6px, 1.5vw, 8px);
 }
 
 .basic-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  gap: clamp(4px, 1vw, 6px);
 }
 
 .scientific-buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  gap: clamp(4px, 1vw, 6px);
 }
 
 .side-buttons {
   display: flex;
   flex-direction: column;
-  gap: clamp(6px, 1vw, 8px);
+  gap: clamp(4px, 1vw, 8px);
 }
 
 .clear-buttons {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: clamp(4px, 0.8vw, 6px);
+  gap: clamp(3px, 0.8vw, 6px);
 }
 
 .memory-buttons {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: clamp(4px, 0.8vw, 6px);
+  gap: clamp(3px, 0.8vw, 6px);
 }
 
 button {
   border: none;
   border-radius: 10px;
-  padding: clamp(8px, 1.5vw, 12px) 0;
-  font-size: clamp(0.8rem, 2vw, 1rem);
+  padding: clamp(6px, 1.5vw, 12px) 0;
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
   cursor: pointer;
   transition: all 0.2s;
   color: #fff;
@@ -303,8 +303,8 @@ button:active {
 
 .clear-btn, .delete-btn {
   background: rgba(255, 82, 82, 0.4);
-  padding: clamp(10px, 2vw, 16px) 0;
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  padding: clamp(8px, 2vw, 16px) 0;
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
 }
 
 .clear-btn:hover, .delete-btn:hover {
@@ -313,8 +313,8 @@ button:active {
 
 .memory-btn {
   background: #29B6F6;
-  padding: clamp(8px, 1.5vw, 12px) 0;
-  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  padding: clamp(6px, 1.5vw, 12px) 0;
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
 }
 
 .memory-btn:hover {
@@ -322,8 +322,8 @@ button:active {
 }
 
 .second-btn {
-  padding: clamp(10px, 2vw, 16px) 0;
-  font-size: clamp(0.8rem, 2vw, 1rem);
+  padding: clamp(8px, 2vw, 16px) 0;
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
   flex-grow: 1;
   background: rgba(144, 233, 255, 0.3);
 }
@@ -336,15 +336,15 @@ button:active {
   margin-top: 15px;
   background: var(--button-bg);
   border-radius: 10px;
-  padding: 15px;
-  max-height: 150px;
+  padding: clamp(10px, 2vw, 15px);
+  max-height: clamp(120px, 20vh, 150px);
   overflow-y: auto;
   transition: max-height 0.3s ease-in-out;
 }
 
 .history-panel h3 {
   margin: 0 0 10px;
-  font-size: clamp(1rem, 3vw, 1.2rem);
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
 }
 
 .history-items {
@@ -358,7 +358,7 @@ button:active {
   justify-content: space-between;
   padding: 5px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: clamp(0.8rem, 2vw, 1rem);
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
 }
 
 .history-expression {
@@ -373,14 +373,15 @@ button:active {
   text-align: center;
   color: rgba(255, 255, 255, 0.5);
   padding: 10px 0;
-  font-size: clamp(0.8rem, 2vw, 1rem);
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
 }
 
 .calculator.history-open .history-panel {
-  max-height: 180px;
+  max-height: clamp(150px, 25vh, 180px);
   overflow-y: auto;
 }
 
+/* Media Queries for Responsive Adjustments */
 @media (max-width: 480px) {
   body {
     padding: 10px;
@@ -391,37 +392,32 @@ button:active {
   }
 
   .calculator {
-    width: 100%;
-    min-height: auto;
-    max-height: 90vh;
-    height: auto;
-    overflow-y: auto;
-    border-radius: 15px;
+    max-width: 320px; /* Fit small phone screens */
+    min-height: 400px;
     padding: 15px;
-    max-width: 100%;
-    margin: auto;
+    border-radius: 15px;
   }
 
   .calculator-header {
-    justify-content: center;
+    justify-content: space-between; /* Keep history-toggle visible */
   }
 
   .history-toggle {
-    display: none;
+    display: block; /* Ensure visibility on mobile */
   }
 
   .buttons-grid {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 3fr 1fr; /* Same structure as web */
   }
 
   button {
-    padding: 12px 0;
-    font-size: 0.9rem;
+    padding: 8px 0;
+    font-size: 0.8rem;
   }
 
   .clear-btn, .delete-btn {
-    padding: 12px 0;
-    font-size: 1rem;
+    padding: 10px 0;
+    font-size: 0.9rem;
   }
 
   .memory-btn {
@@ -430,12 +426,12 @@ button:active {
   }
 
   .second-btn {
-    padding: 8px 0;
+    padding: 10px 0;
     font-size: 0.8rem;
   }
 
   .side-buttons {
-    gap: 4px;
+    gap: 6px;
   }
 
   .clear-buttons {
@@ -443,26 +439,26 @@ button:active {
   }
 
   .memory-buttons {
-    gap: 3px;
+    gap: 4px;
   }
 
   .display {
-    min-height: 60px;
+    min-height: 50px;
   }
 
   .history-panel {
-    max-height: 100px;
+    max-height: 120px;
   }
 
   .calculator.history-open .history-panel {
-    max-height: 130px;
+    max-height: 150px;
   }
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
   .calculator {
-    max-width: 500px;
-    padding: 15px;
+    max-width: 450px;
+    padding: 20px;
   }
 
   button {
@@ -482,11 +478,11 @@ button:active {
 
   .second-btn {
     padding: 12px 0;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .side-buttons {
-    gap: 6px;
+    gap: 7px;
   }
 }
 
